@@ -21,8 +21,8 @@ jobs:
       - name: Install uv & SkillSpector
         run: |
           pip install uv
-          uv tool install git+https://github.com/nvidia/skillspector.git
+          python -m uv tool install git+https://github.com/nvidia/skillspector.git
 
       - name: Run SkillSpector Static Scan
-  run: |
-    skillspector scan ./ --no-llm || true
+        run: |
+          ~/.local/bin/skillspector scan ./ --no-llm || true

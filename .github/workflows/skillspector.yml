@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: # يتيح لك زر تشغيل يدوي بسيط متى ما رغبت في أي وقت
+  workflow_dispatch: # زر التشغيل اليدوي البسيط
 
 jobs:
   security-scan:
@@ -24,11 +24,14 @@ jobs:
           pip install uv
           python -m uv tool install git+https://github.com/nvidia/skillspector.git
 
-      - name: Run SkillSpector Flexible Scan
+      - name: Run SkillSpector Claude AI Scan
         env:
-          SKILLSPECTOR_PROVIDER: openai
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # توجيه الأداة لاستخدام Claude (Anthropic)
+          SKILLSPECTOR_PROVIDER: anthropic
+          
+          # جلب مفتاح كلود من إعدادات المستودع
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # فحص بسيط ومباشر مع تخطي الأخطاء لضمان استمرار عمل المشروع بسلاسة
+          # فحص المجلد مع تخطي أي أخطاء حرجة لضمان نجاح الـ Workflow
           ~/.local/bin/skillspector scan ./ || true

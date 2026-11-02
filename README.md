@@ -1,0 +1,1 @@
+# .github-workflows-skillspector.yml-my-skill-security

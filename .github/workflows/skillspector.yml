@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch: # يتيح لك زر تشغيل يدوي بسيط متى ما رغبت في أي وقت
 
 jobs:
   security-scan:
@@ -23,6 +24,11 @@ jobs:
           pip install uv
           python -m uv tool install git+https://github.com/nvidia/skillspector.git
 
-      - name: Run SkillSpector Static Scan
+      - name: Run SkillSpector Flexible Scan
+        env:
+          SKILLSPECTOR_PROVIDER: openai
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          ~/.local/bin/skillspector scan ./ --no-llm || true
+          # فحص بسيط ومباشر مع تخطي الأخطاء لضمان استمرار عمل المشروع بسلاسة
+          ~/.local/bin/skillspector scan ./ || true
